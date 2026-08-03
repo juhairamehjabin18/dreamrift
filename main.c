@@ -1,104 +1,60 @@
-// ============================================================
-//  main.c  --  DREAMRIFT entry point
-//  Ties together: background.c, world.c (obstacles+coins),
-//  game.c (player + globals)
-//
-//  COMPILE (Linux):
-//    gcc -o dreamrift main.c game.c world.c background.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
-// ============================================================
+#include "raylib.h"
+#include "config.h"
+#include "textures.h"
 #include "game.h"
 
-static int   score        = 0;
-static bool  gameOver      = false;
-static float obsTimer      = 0.0f;
-static float coinTimer     = 0.0f;
-
-static void ResetGame(void) {
-    for (int i = 0; i < MAX_OBS; i++)   obs[i].alive   = false;
-    for (int i = 0; i < MAX_COINS; i++) coins[i].alive = false;
-    PlayerInit();
-    score      = 0;
-    gameOver   = false;
-    obsTimer   = 0.0f;
-    coinTimer  = 0.0f;
-    bgScroll   = 0.0f;
-}
-
-static bool CheckCollision(void) {
-    Rectangle prect = PlayerRect();
-    for (int i = 0; i < MAX_OBS; i++) {
-        if (obs[i].alive && CheckCollisionRecs(prect, obs[i].rect)) return true;
-    }
-    return false;
-}
-
-static void CheckCoins(void) {
-    Rectangle prect = PlayerRect();
-    for (int i = 0; i < MAX_COINS; i++) {
-        if (!coins[i].alive) continue;
-        Rectangle crect = { coins[i].pos.x - 12, coins[i].pos.y - 12, 24, 24 };
-        if (CheckCollisionRecs(prect, crect)) {
-            coins[i].alive = false;
-            score++;
-        }
-    }
-}
-
-int main(void) {
-    InitWindow(SCREEN_W, SCREEN_H, "DREAMRIFT");
+int main(void)
+{
+    /* Start windowed and resizable; press F11 any time to go fullscreen.
+     * Either way the 640x360 canvas is always scaled by a whole number
+     * (see the scale calculation below) so the pixel art never looks blurry. */
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(1280, 720, "Dreamrift");
     SetTargetFPS(60);
-    srand((unsigned int)time(NULL));
+    SetExitKey(KEY_NULL); /* don't let ESC instantly close the game */
 
-    ResetGame();
+    GameTextures tex = LoadGameTextures();
+    GameState game = GameInit();
+
+    RenderTexture2D canvas = LoadRenderTexture(CANVAS_WIDTH, CANVAS_HEIGHT);
+    SetTextureFilter(canvas.texture, TEXTURE_FILTER_POINT);
 
     while (!WindowShouldClose()) {
+        if (IsKeyPressed(KEY_F11)) ToggleFullscreen();
+
         float dt = GetFrameTime();
+        GameUpdate(&game, dt);
 
-        if (!gameOver) {
-            // ---------- Update ----------
-            bgScroll += scrollSpd * dt;
+        /* ---- draw the whole game to the small fixed-size canvas ---- */
+        BeginTextureMode(canvas);
+            ClearBackground(BLACK);
+            GameDraw(&game, &tex);
+        EndTextureMode();
 
-            PlayerUpdate(dt);
-            ObsUpdate(dt);
-            CoinUpdate(dt);
+        /* ---- scale that canvas up to fill the real window, in whole numbers ---- */
+        int screenW = GetScreenWidth();
+        int screenH = GetScreenHeight();
+        int scale = screenW / CANVAS_WIDTH;
+        int scaleH = screenH / CANVAS_HEIGHT;
+        if (scaleH < scale) scale = scaleH;
+        if (scale < 1) scale = 1;
 
-            obsTimer += dt;
-            if (obsTimer > 1.4f) { obsTimer = 0.0f; ObsSpawn(); }
+        int drawW = CANVAS_WIDTH * scale;
+        int drawH = CANVAS_HEIGHT * scale;
+        int offsetX = (screenW - drawW) / 2;
+        int offsetY = (screenH - drawH) / 2;
 
-            coinTimer += dt;
-            if (coinTimer > 0.9f) {
-                coinTimer = 0.0f;
-                CoinSpawn(SCREEN_W + 40, RandF(GROUND_Y - 220, GROUND_Y - 60));
-            }
-
-            CheckCoins();
-            if (CheckCollision()) gameOver = true;
-        } else {
-            if (IsKeyPressed(KEY_ENTER)) ResetGame();
-        }
-
-        // ---------- Draw ----------
         BeginDrawing();
-        ClearBackground(BLACK);
-
-        BackgroundDraw();
-        ObsDraw();
-        CoinDraw();
-        PlayerDraw();
-
-        DrawText(TextFormat("SCORE: %d", score), 30, 20, 26, WHITE);
-        DrawText("A/D: move   SHIFT: run   SPACE: jump   G: flip gravity",
-                 30, 54, 16, Fade(WHITE, 0.6f));
-
-        if (gameOver) {
-            DrawRectangle(0, 0, SCREEN_W, SCREEN_H, Fade(BLACK, 0.55f));
-            DrawText("GAME OVER", SCREEN_W/2 - 110, SCREEN_H/2 - 30, 40, WHITE);
-            DrawText("Press ENTER to restart", SCREEN_W/2 - 110, SCREEN_H/2 + 20, 20, Fade(WHITE, 0.8f));
-        }
-
+            ClearBackground(BLACK); /* letterbox bars on non-16:9 windows */
+            /* raylib render textures are stored upside-down, hence -height here */
+            Rectangle src = { 0, 0, (float)canvas.texture.width, -(float)canvas.texture.height };
+            Rectangle dst = { (float)offsetX, (float)offsetY, (float)drawW, (float)drawH };
+            DrawTexturePro(canvas.texture, src, dst, (Vector2){ 0, 0 }, 0.0f, WHITE);
         EndDrawing();
     }
 
+    UnloadRenderTexture(canvas);
+    UnloadGameTextures(&tex);
     CloseWindow();
     return 0;
 }
