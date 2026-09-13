@@ -57,4 +57,8 @@ void UIDrawMenu(void)
     const char *controls = "ARROWS / WASD move   SPACE / UP = jump";
     int cW = MeasureText(controls, 10);
     DrawText(controls, (CANVAS_WIDTH - cW) / 2, 190, 10, LIGHTGRAY);
+
+    const char *prompt = "press ENTER to start";
+    int pW = MeasureText(prompt, 14);
+    DrawText(prompt, (CANVAS_WIDTH - pW) / 2, 230, 14, (Color){ 255, 215, 90, 255 });
 }
