@@ -53,4 +53,8 @@ void UIDrawMenu(void)
     const char *sub = "run . jump . collect . avoid";
     int subW = MeasureText(sub, 12);
     DrawText(sub, (CANVAS_WIDTH - subW) / 2, 145, 12, GRAY);
+
+    const char *controls = "ARROWS / WASD move   SPACE / UP = jump";
+    int cW = MeasureText(controls, 10);
+    DrawText(controls, (CANVAS_WIDTH - cW) / 2, 190, 10, LIGHTGRAY);
 }
