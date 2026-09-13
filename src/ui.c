@@ -50,4 +50,7 @@ void UIDrawMenu(void)
     int titleW = MeasureText(title, titleSize);
     DrawText(title, (CANVAS_WIDTH - titleW) / 2, 100, titleSize, RAYWHITE);
 
+    const char *sub = "run . jump . collect . avoid";
+    int subW = MeasureText(sub, 12);
+    DrawText(sub, (CANVAS_WIDTH - subW) / 2, 145, 12, GRAY);
 }
