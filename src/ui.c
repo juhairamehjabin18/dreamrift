@@ -65,4 +65,5 @@ void UIDrawMenu(void)
 void UIDrawPaused(void)
 {
     DrawRectangle(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, (Color){ 0, 0, 0, 140 });
+    const char *text = "PAUSED - press P to resume";
 }
