@@ -38,7 +38,7 @@ typedef enum {
 } PotionType;
 
 /* ---------- Enemy: Dreadwing ---------- */
-#define ENEMY_SPAWN_INTERVAL 15.0f
+#define ENEMY_SPAWN_INTERVAL 10.0f
 #define ENEMY_DAMAGE          5
 #define MAX_ENEMIES           3
 #define ENEMY_WIDTH          28

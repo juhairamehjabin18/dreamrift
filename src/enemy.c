@@ -2,7 +2,7 @@
 
 
 #define ENEMY_BAND_TOP    270.0f
-#define ENEMY_BAND_BOTTOM 296.0f
+#define ENEMY_BAND_BOTTOM 290.0f
 
 EnemySystem EnemySystemInit(void)
 {
