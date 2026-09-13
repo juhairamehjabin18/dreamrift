@@ -83,7 +83,7 @@ void UIDrawGameOver(int score, int highScore)
     int sW = MeasureText(scoreText, 14);
     DrawText(scoreText, (CANVAS_WIDTH - sW) / 2, 175, 14, RAYWHITE);
 
-    const char *prompt = "press R to run again";
+    const char *prompt = "press R to restart";
     int pW = MeasureText(prompt, 12);
     DrawText(prompt, (CANVAS_WIDTH - pW) / 2, 210, 12, (Color){ 255, 215, 90, 255 });
 }
