@@ -69,3 +69,10 @@ void UIDrawPaused(void)
     int w = MeasureText(text, 18);
     DrawText(text, (CANVAS_WIDTH - w) / 2, CANVAS_HEIGHT / 2 - 9, 18, RAYWHITE);
 }
+
+void UIDrawGameOver(int score, int highScore)
+{
+    const char *title = "GAME OVER";
+    int titleW = MeasureText(title, 30);
+    DrawText(title, (CANVAS_WIDTH - titleW) / 2, 130, 30, (Color){ 230, 70, 70, 255 });
+}
