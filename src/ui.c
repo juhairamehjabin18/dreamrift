@@ -66,4 +66,6 @@ void UIDrawPaused(void)
 {
     DrawRectangle(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, (Color){ 0, 0, 0, 140 });
     const char *text = "PAUSED - press P to resume";
+    int w = MeasureText(text, 18);
+    DrawText(text, (CANVAS_WIDTH - w) / 2, CANVAS_HEIGHT / 2 - 9, 18, RAYWHITE);
 }
