@@ -72,7 +72,14 @@ void UIDrawPaused(void)
 
 void UIDrawGameOver(int score, int highScore)
 {
+    DrawRectangle(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, (Color){ 20, 0, 0, 160 });
+
     const char *title = "GAME OVER";
     int titleW = MeasureText(title, 30);
     DrawText(title, (CANVAS_WIDTH - titleW) / 2, 130, 30, (Color){ 230, 70, 70, 255 });
+
+    char scoreText[48];
+    snprintf(scoreText, sizeof(scoreText), "score %d    high score %d", score, highScore);
+    int sW = MeasureText(scoreText, 14);
+    DrawText(scoreText, (CANVAS_WIDTH - sW) / 2, 175, 14, RAYWHITE);
 }
