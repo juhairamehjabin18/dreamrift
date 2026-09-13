@@ -62,3 +62,7 @@ void UIDrawMenu(void)
     int pW = MeasureText(prompt, 14);
     DrawText(prompt, (CANVAS_WIDTH - pW) / 2, 230, 14, (Color){ 255, 215, 90, 255 });
 }
+void UIDrawPaused(void)
+{
+    DrawRectangle(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, (Color){ 0, 0, 0, 140 });
+}
