@@ -43,8 +43,7 @@ typedef enum {
 #define MAX_ENEMIES           3
 #define ENEMY_WIDTH          28
 #define ENEMY_HEIGHT         24
-#define ENEMY_FLAP_SPEED      3.0f   /* radians / second used inside sinf() */
-#define ENEMY_FLAP_HEIGHT    90.0f
+
 
 /* ---------- Obstacles (blocks) ---------- */
 #define MAX_OBSTACLES     6

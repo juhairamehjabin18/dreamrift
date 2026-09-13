@@ -1,11 +1,8 @@
 #include "enemy.h"
-#include <math.h>
 
-/* baseY is the CENTER of the flap. The sine wave swings +/- ENEMY_FLAP_HEIGHT
- * around it, so picking this band (plus the clamp below) guarantees the bat
- * regularly dips all the way down to ground level, where the cat actually is. */
-#define ENEMY_BAND_TOP    210.0f
-#define ENEMY_BAND_BOTTOM 250.0f
+
+#define ENEMY_BAND_TOP    270.0f
+#define ENEMY_BAND_BOTTOM 296.0f
 
 EnemySystem EnemySystemInit(void)
 {
@@ -45,14 +42,7 @@ void EnemySystemUpdate(EnemySystem *sys, float dt, float scrollDelta)
 
 static float EnemyCurrentY(const Enemy *e)
 {
-    /* "flaps up and down in place" - a simple sine wave around its base height */
-    float y = e->baseY + sinf(e->age * ENEMY_FLAP_SPEED) * ENEMY_FLAP_HEIGHT;
-
-    /* never let the bat's sprite sink visibly below the ground line */
-    float lowestAllowed = GROUND_Y - ENEMY_HEIGHT;
-    if (y > lowestAllowed) y = lowestAllowed;
-
-    return y;
+    return e->baseY;
 }
 
 void EnemySystemCheckDamage(EnemySystem *sys, Player *p)

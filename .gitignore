@@ -1,0 +1,16 @@
+# build output
+dreamrift
+dreamrift.exe
+*.o
+*.obj
+*.exe
+*.out
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# editor/IDE
+.vscode/
+.vs/
+*.swp
