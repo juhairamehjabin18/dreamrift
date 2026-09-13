@@ -43,3 +43,11 @@ void UIDrawHUD(const Player *p, int score, int highScore)
         DrawText(potText, 10, 30, 12, (Color){ 130, 220, 255, 255 });
     }
 }
+void UIDrawMenu(void)
+{
+    const char *title = "DREAMRIFT";
+    int titleSize = 36;
+    int titleW = MeasureText(title, titleSize);
+    DrawText(title, (CANVAS_WIDTH - titleW) / 2, 100, titleSize, RAYWHITE);
+
+}
